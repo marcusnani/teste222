@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio - Lis Cake Confeitaria Artesanal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fafafa;
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #8ec9a0;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #d0e1d0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+            color: #3c3c3c;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .carousel {
+            margin: 40px auto;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-section {
+            min-width: 100%;
+            text-align: center;
+        }
+
+        .carousel-header {
+            background-color: #8ec9a0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px 20px;
+        }
+
+        .menu-item {
+            flex: 0 0 calc(33.33% - 20px);
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .menu-item-content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .menu-item-content h2 {
+            margin: 0;
+            font-size: 1.6em;
+            color: #3e4d37;
+        }
+
+        .menu-item-content p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #6b7a56;
+        }
+
+        .menu-item-content .price {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #4d5a47;
+        }
+
+        .add-to-cart {
+            background-color: #4d5a47;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #3e4d37;
+            transform: scale(1.05);
+        }
+
+        .carousel-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .carousel-buttons button {
+            background-color: #4d5a47;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin: 0 15px;
+            font-size: 1.2em;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .carousel-buttons button:hover {
+            background-color: #3e4d37;
+            transform: scale(1.1);
+        }
+
+        .carousel-buttons button:focus {
+            outline: none;
+        }
+
+        .carousel-buttons .next-button::before {
+            content: '→';
+            font-size: 1.8em;
+        }
+
+        .carousel-buttons .prev-button::before {
+            content: '←';
+            font-size: 1.8em;
+        }
+
+        /* Carrinho de Compras */
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4d5a47;
+            color: white;
+            font-size: 1.5em;
+            border-radius: 50%;
+            padding: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+
+        .cart-icon:hover {
+            background-color: #3e4d37;
+        }
+
+        .cart {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            display: none;
+            z-index: 999;
+            width: 90%;
+            transition: right 0.3s ease-in-out;
+        }
+
+        .cart ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart ul li {
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1em;
+        }
+
+        .cart .total {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #4d5a47;
+            margin-top: 10px;
+        }
+
+        .remove-item {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .remove-item:hover {
+            background-color: #c9302c;
+        }
+
+        .clear-cart {
+            background-color: #f0ad4e;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .clear-cart:hover {
+            background-color: #ec971f;
+        }
+
+        .proceed-to-payment {
+            background-color: #5bc0de;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .proceed-to-payment:hover {
+            background-color: #31b0d5;
+        }
+
+        .cart-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #5bc0de;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            display: none;
+            z-index: 1001;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #8ec9a0;
+            color: #4d5a47;
+            font-size: 0.9em;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lis Cake Confeitaria Artesanal</h1>
+    </header>
+
+    <div class="carousel">
+        <div class="carousel-track">
+            <!-- Categorias: Pequenos, Médios, Grandes e Gigantes -->
+            <div class="carousel-section" id="pequenos">
+                <div class="carousel-header">
+                    <h2>Pequenos</h2>
+                </div>
+                <section class="menu">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x200" alt="Cupcake de Baunilha">
+                        <div class="menu-item-content">
+                            <h2>Cupcake de Baunilha</h2>
+                            <p>Massa leve com cobertura de creme de baunilha.</p>
+                            <p class="price">R$ 8,00</p>
+                            <button class="add-to-cart" onclick="addToCart('Cupcake de Baunilha', 8)">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="carousel-section" id="medios">
+                <div class="carousel-header">
+                    <h2>Médios</h2>
+                </div>
+                <section class="menu">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x200" alt="Torta de Morango">
+                        <div class="menu-item-content">
+                            <h2>Torta de Morango</h2>
+                            <p>Torta cremosa de morango com base de biscoito.</p>
+                            <p class="price">R$ 20,00</p>
+                            <button class="add-to-cart" onclick="addToCart('Torta de Morango', 20)">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="carousel-section" id="grandes">
+                <div class="carousel-header">
+                    <h2>Grandes</h2>
+                </div>
+                <section class="menu">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x200" alt="Torta Holandesa">
+                        <div class="menu-item-content">
+                            <h2>Torta Holandesa</h2>
+                            <p>Cremosa torta com base de biscoito e cobertura de chocolate.</p>
+                            <p class="price">R$ 50,00</p>
+                            <button class="add-to-cart" onclick="addToCart('Torta Holandesa', 50)">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="carousel-section" id="gigantes">
+                <div class="carousel-header">
+                    <h2>Gigantes</h2>
+                </div>
+                <section class="menu">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x200" alt="Bolo Gigante">
+                        <div class="menu-item-content">
+                            <h2>Bolo Gigante</h2>
+                            <p>Bolo imenso com camadas de recheio de chocolate.</p>
+                            <p class="price">R$ 100,00</p>
+                            <button class="add-to-cart" onclick="addToCart('Bolo Gigante', 100)">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="carousel-buttons">
+            <button class="prev-button">&#8592;</button>
+            <button class="next-button">&#8594;</button>
+        </div>
+    </div>
+
+    <div class="cart-icon" onclick="toggleCart()">🛒</div>
+
+    <div class="cart">
+        <h3>Carrinho</h3>
+        <ul id="cart-items"></ul>
+        <p class="total">Total: R$ 0,00</p>
+        <button class="clear-cart" onclick="clearCart()">Limpar Carrinho</button>
+        <button class="proceed-to-payment" onclick="window.location.href='/pagina-de-pagamento'">Ir para o Pagamento</button>
+    </div>
+
+    <div class="cart-message" id="cart-message">Produto adicionado ao carrinho!</div>
+
+    <script>
+        let cart = [];
+        const cartMessage = document.getElementById('cart-message');
+        const cartItemsList = document.getElementById('cart-items');
+        const totalPrice = document.querySelector('.total');
+        const cartElement = document.querySelector('.cart');
+
+        let currentCategory = 0;
+        const categories = document.querySelectorAll('.carousel-section');
+
+        function addToCart(product, price) {
+            cart.push({ product, price });
+            updateCart();
+            cartMessage.style.display = 'block';
+            setTimeout(() => {
+                cartMessage.style.display = 'none';
+            }, 2000);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function updateCart() {
+            cartItemsList.innerHTML = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${item.product} - R$ ${item.price.toFixed(2)} 
+                <button class="remove-item" onclick="removeFromCart(${index})">Remover</button>`;
+                cartItemsList.appendChild(li);
+                total += item.price;
+            });
+            totalPrice.textContent = `Total: R$ ${total.toFixed(2)}`;
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCart();
+        }
+
+        function toggleCart() {
+            cartElement.style.display = cartElement.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function showCategory(index) {
+            categories.forEach((category, i) => {
+                category.style.display = i === index ? 'block' : 'none';
+            });
+        }
+
+        function nextCategory() {
+            currentCategory = (currentCategory + 1) % categories.length;
+            showCategory(currentCategory);
+        }
+
+        function prevCategory() {
+            currentCategory = (currentCategory - 1 + categories.length) % categories.length;
+            showCategory(currentCategory);
+        }
+
+        document.querySelector('.next-button').addEventListener('click', nextCategory);
+        document.querySelector('.prev-button').addEventListener('click', prevCategory);
+
+        // Exibe a primeira categoria por padrão
+        showCategory(currentCategory);
+    </script>
+</body>
+</html>
